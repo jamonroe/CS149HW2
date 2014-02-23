@@ -38,7 +38,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
 		return result;
 	}
 	
@@ -74,7 +74,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
 		return result;
 	}
 	
@@ -108,7 +108,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
 		return result;
 	}
 	
@@ -149,7 +149,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
 		return result;
 	}
 	
@@ -159,22 +159,27 @@ public class Simulator {
 	 * @param list The list of completed operations
 	 * @return The results as a string
 	 */
-	private static String analyzeCompletion(ArrayList<Process> list) {
+	private static String analyzeCompletion(ArrayList<Process> list, int duration) {
 		String result;
 		float turnaround = 0;
 		float waittime = 0;
 		float responsetime = 0;
+		float throughput = 0;
 		int count = list.size();
 		for (Process p : list) {
 			turnaround += p.turnaround();
 			waittime += p.waittime();
 			responsetime += p.responsetime();
 		}
+		//Since time 0 is counted, I've added 1
+		System.out.println(list.size() + " " + duration);
+		throughput = (float) list.size() / (duration + 1);
 		turnaround /= count;
 		waittime /= count;
 		responsetime /= count;
 		result = "Average turnaround: " + turnaround + "\nAverage wait time: "
-		+ waittime + "\nAverage response time: " + responsetime;
+		+ waittime + "\nAverage response time: " + responsetime
+		+ "\nThroughput: " + throughput;
 		return result;
 	}
 }
