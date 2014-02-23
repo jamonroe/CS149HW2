@@ -85,4 +85,15 @@ public class Process {
 			}
 		};
 	}
+	
+	public static Comparator<Process> completionTimeComparator() {
+		return new Comparator<Process>() {
+			@Override
+			public int compare(Process procA, Process procB) {
+				if (procB.getRunTime() - procA.getRunTime() < 0) return 1;
+				if (procB.getRunTime() - procA.getRunTime() > 0) return -1;
+				return 0;
+			}
+		};
+	}
 }

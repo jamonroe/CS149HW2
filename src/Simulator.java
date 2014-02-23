@@ -43,7 +43,7 @@ public class Simulator {
 	}
 	
 	/**
-	 * First Come First Served algorithm
+	 * Round Robin algorithm
 	 * 
 	 * @param future The list of processes which will "arrive"
 	 * @param duration The length of the run in quanta
@@ -65,11 +65,87 @@ public class Simulator {
 				if (active.get(0).process(time))
 					completed.add(active.remove(0).setCompletion(time + 1));
 				else
+					//removes the process that just ran, and puts it in the back
 					active.add(active.remove(0));
 			} else {
 				proc = '-';
 			}
 			// **** RR ends here ****
+			
+			result += proc;
+		}
+		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		return result;
+	}
+	
+	/**
+	 * Shortest Remaining Time algorithm
+	 * 
+	 * @param future The list of processes which will "arrive"
+	 * @param duration The length of the run in quanta
+	 * @return The results of the run as a String
+	 */
+	public static String shortestRemainingTime(FutureStack future, int duration) {
+		String result = "=== Shortest Remaining Time ===\n";
+		int time;
+		ArrayList<Process> active = new ArrayList<Process>();
+		ArrayList<Process> completed = new ArrayList<Process>();
+		for (time = 0; time <= duration; time++) {
+			char proc;
+			while (future.hasActiveProcess(time))
+				active.add(future.pop());
+			
+			// **** SRT starts here ****
+			Collections.sort(active, Process.timeRemainingComparator());
+			if(active.size() > 0) {
+				proc = active.get(0).getName();
+				if (active.get(0).process(time))
+					completed.add(active.remove(0).setCompletion(time + 1));
+			} else {
+				proc = '-';
+			}
+			// **** SRT ends here ****
+			
+			result += proc;
+		}
+		result += "\n\n" + analyzeCompletion(completed) + "\n";
+		return result;
+	}
+	
+	/**
+	 * Shortest Job First algorithm
+	 * 
+	 * sort at time = 0
+	 * then sort after tasks have completed
+	 * 
+	 * @param future The list of processes which will "arrive"
+	 * @param duration The length of the run in quanta
+	 * @return The results of the run as a String
+	 */
+	public static String shortestJobFirst(FutureStack future, int duration) {
+		String result = "=== Shortest Job First ===\n";
+		int time;
+		ArrayList<Process> active = new ArrayList<Process>();
+		ArrayList<Process> completed = new ArrayList<Process>();
+		for (time = 0; time <= duration; time++) {
+			char proc;
+			while (future.hasActiveProcess(time))
+				active.add(future.pop());
+			
+			// **** SJF starts here ****
+			if (time == 0)
+				Collections.sort(active, Process.completionTimeComparator());
+			if(active.size() > 0) {
+				proc = active.get(0).getName();
+				if (active.get(0).process(time))
+				{
+					completed.add(active.remove(0).setCompletion(time + 1));
+					Collections.sort(active, Process.completionTimeComparator());
+				}
+			} else {
+				proc = '-';
+			}
+			// **** SJF ends here ****
 			
 			result += proc;
 		}
