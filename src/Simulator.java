@@ -162,10 +162,10 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String nonpreemtiveHighestPriorityFirst(FutureStack future, int duration)
+	public static String nonpreemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with FCFS
-		String result = "=== Highest Priority First (Nonpreemtive) ===\n";
+		String result = "=== Highest Priority First (Nonpreemptive) ===\n";
 		
 		//Setup
 		int time;
@@ -187,14 +187,7 @@ public class Simulator {
 			while(future.hasActiveProcess(time))
 			{
 				process = future.pop();
-				switch(process.getPriority())
-				{
-					case 1:priorityQueues.get(0).add(process);break;
-					case 2:priorityQueues.get(1).add(process);break;
-					case 3:priorityQueues.get(2).add(process);break;
-					case 4:priorityQueues.get(3).add(process);break;
-					default:break;
-				}
+				priorityQueues.get(process.getPriority() - 1).add(process);
 			}
 			
 			//Empty process queues into active queue
@@ -227,18 +220,19 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String preemtiveHighestPriorityFirst(FutureStack future, int duration)
+	public static String preemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with RR
-		String result = "=== Highest Priority First (Preemtive) ===\n";
+		String result = "=== Highest Priority First (Preemptive) ===\n";
 		int time;
 		ArrayList<Process> completed = new ArrayList<Process>();
 		
 		//Set up priority queues
-		Queue<Process> priority1 = new LinkedList<Process>();
-		Queue<Process> priority2 = new LinkedList<Process>();
-		Queue<Process> priority3 = new LinkedList<Process>();
-		Queue<Process> priority4 = new LinkedList<Process>();
+		ArrayList<LinkedList<Process>> priorityQueues = new ArrayList<LinkedList<Process>>();
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
 		
 		for(time = 0; time <= duration; time++)
 		{
@@ -248,30 +242,21 @@ public class Simulator {
 			while(future.hasActiveProcess(time))
 			{
 				process = future.pop();
-				switch(process.getPriority())
-				{
-					case 1:priority1.add(process);break;
-					case 2:priority2.add(process);break;
-					case 3:priority3.add(process);break;
-					case 4:priority4.add(process);break;
-					default:break;
-				}
+				priorityQueues.get(process.getPriority() - 1).add(process);
 			}
 			
 			Queue<Process> queue = null;
 			
 			//Select priority queue to process
-			if(!priority1.isEmpty())
-				queue = priority1;
-			else if(!priority2.isEmpty())
-				queue = priority2;
-			else if(!priority3.isEmpty())
-				queue = priority3;
-			else if(!priority4.isEmpty())
-				queue = priority4;
-			else
-			{
-				result+='-';
+			for (int i = 0; i < priorityQueues.size(); i++) {
+				if (!priorityQueues.get(i).isEmpty()) {
+					queue = priorityQueues.get(i);
+					break;
+				}
+			}
+			
+			if (queue == null) {
+				result += '-';
 				continue;
 			}
 			
@@ -289,7 +274,7 @@ public class Simulator {
 			else//Time quanta is up, add to back of queue"
 				queue.add(process);
 			
-			result+=proc;
+			result += proc;
 			//End Preemptive HPF
 		}
 		
@@ -316,8 +301,6 @@ public class Simulator {
 			waittime += p.waittime();
 			responsetime += p.responsetime();
 		}
-		//Since time 0 is counted, I've added 1
-		System.out.println(list.size() + " " + duration);
 		throughput = (float) list.size() / (duration + 1);
 		turnaround /= count;
 		waittime /= count;

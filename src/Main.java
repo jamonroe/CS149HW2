@@ -31,11 +31,11 @@ public class Main {
 		future.add(new Process('A', 0, 2, 1));
 		future.add(new Process('B', 0, 2, 1));
 		future.add(new Process('C', 2, 2, 2));
-		System.out.println(Simulator.preemtiveHighestPriorityFirst(future, 5));
+		System.out.println(Simulator.preemptiveHighestPriorityFirst(future, 5));
 		
 		future.add(new Process('A', 2, 2, 1));
 		future.add(new Process('B', 2, 2, 2));
 		future.add(new Process('C', 0, 2, 2));
-		System.out.println(Simulator.nonpreemtiveHighestPriorityFirst(future, 5));
+		System.out.println(Simulator.nonpreemptiveHighestPriorityFirst(future, 5));
 	}
 }
