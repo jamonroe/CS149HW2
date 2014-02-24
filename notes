@@ -1,0 +1,13 @@
+// **** FCFS starts here ****
+Collections.sort(active, Process.arrivalTimeComparator());
+if(active.size() > 0) 
+{
+	proc = active.get(0).getName();
+	if (active.get(0).process(time))
+		completed.add(active.remove(0).setCompletion(time + 1));
+} 
+else 
+{
+	proc = '-';
+}
+// **** FCFS ends here ****

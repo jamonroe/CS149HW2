@@ -21,7 +21,7 @@ public class Process {
 		this.arrival_time = arrival_time;
 		this.run_time = run_time;
 		this.time_remaining = run_time;
-		this.name = name;
+		this.priority = priority;
 		this.completion_time = -1;
 		this.first_process_time = -1;
 	}

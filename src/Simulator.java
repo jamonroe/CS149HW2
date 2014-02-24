@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Simulates algorithms on given process stacks
@@ -150,6 +152,149 @@ public class Simulator {
 			result += proc;
 		}
 		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
+		return result;
+	}
+
+	/**
+	 * Nonpreemptive Highest Priority First Algorithm
+	 * 
+	 * @param future The list of processes which will "arrive"
+	 * @param duration The length of the run in quanta
+	 * @return The results of the run as a String
+	 */
+	public static String nonpreemtiveHighestPriorityFirst(FutureStack future, int duration)
+	{
+		//Implemented with FCFS
+		String result = "=== Highest Priority First (Nonpreemtive) ===\n";
+		
+		//Setup
+		int time;
+		ArrayList<Process> active = new ArrayList<Process>();
+		ArrayList<Process> completed = new ArrayList<Process>();
+		
+		//Set up priority queues
+		ArrayList<LinkedList<Process>> priorityQueues = new ArrayList<LinkedList<Process>>();
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
+		priorityQueues.add(new LinkedList<Process>());
+		
+		for(time = 0; time <= duration; time++)
+		{
+			Process process;
+			char proc;
+			//Process is arriving, add it into the proper queue
+			while(future.hasActiveProcess(time))
+			{
+				process = future.pop();
+				switch(process.getPriority())
+				{
+					case 1:priorityQueues.get(0).add(process);break;
+					case 2:priorityQueues.get(1).add(process);break;
+					case 3:priorityQueues.get(2).add(process);break;
+					case 4:priorityQueues.get(3).add(process);break;
+					default:break;
+				}
+			}
+			
+			//Empty process queues into active queue
+			for(int priority=0;priority<4;priority++)
+				while(!priorityQueues.get(priority).isEmpty())
+					active.add(priorityQueues.get(priority).remove());
+			
+			//Start Non-preemptive HPF starts here
+			if(active.size() > 0) 
+			{
+				proc = active.get(0).getName();
+				if (active.get(0).process(time))
+					completed.add(active.remove(0).setCompletion(time + 1));
+			} 
+			else 
+			{
+				proc = '-';
+			}
+			//End Non-preemptive HPF
+			result += proc;
+		}
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
+		return result;
+	}
+	
+	/**
+	 * Preemptive Highest Priority First Algorithm
+	 * 
+	 * @param future The list of processes which will "arrive"
+	 * @param duration The length of the run in quanta
+	 * @return The results of the run as a String
+	 */
+	public static String preemtiveHighestPriorityFirst(FutureStack future, int duration)
+	{
+		//Implemented with RR
+		String result = "=== Highest Priority First (Preemtive) ===\n";
+		int time;
+		ArrayList<Process> completed = new ArrayList<Process>();
+		
+		//Set up priority queues
+		Queue<Process> priority1 = new LinkedList<Process>();
+		Queue<Process> priority2 = new LinkedList<Process>();
+		Queue<Process> priority3 = new LinkedList<Process>();
+		Queue<Process> priority4 = new LinkedList<Process>();
+		
+		for(time = 0; time <= duration; time++)
+		{
+			Process process;
+			char proc;
+			//Process is arriving, add it into the proper queue
+			while(future.hasActiveProcess(time))
+			{
+				process = future.pop();
+				switch(process.getPriority())
+				{
+					case 1:priority1.add(process);break;
+					case 2:priority2.add(process);break;
+					case 3:priority3.add(process);break;
+					case 4:priority4.add(process);break;
+					default:break;
+				}
+			}
+			
+			Queue<Process> queue = null;
+			
+			//Select priority queue to process
+			if(!priority1.isEmpty())
+				queue = priority1;
+			else if(!priority2.isEmpty())
+				queue = priority2;
+			else if(!priority3.isEmpty())
+				queue = priority3;
+			else if(!priority4.isEmpty())
+				queue = priority4;
+			else
+			{
+				result+='-';
+				continue;
+			}
+			
+			//Preemptive HPF starts here
+			
+			//Get process from the queue
+			process = queue.remove();
+			proc = process.getName();
+			
+			//Process the process (yea it's a bit confusing, sorry :( )
+			if(process.process(time))
+			{
+				completed.add(process.setCompletion(time + 1));
+			}
+			else//Time quanta is up, add to back of queue"
+				queue.add(process);
+			
+			result+=proc;
+			//End Preemptive HPF
+		}
+		
+		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
+		
 		return result;
 	}
 	
