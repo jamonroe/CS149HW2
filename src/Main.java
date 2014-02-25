@@ -1,3 +1,5 @@
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Random;
 
@@ -16,31 +18,51 @@ public class Main {
 	public static final int PROCESS_COUNT = 26;
 	
 	public static void main(String[] args) {
+		try {
+			System.out.println("\n===== Round Robin =====\n");
+			System.out.println("Round Robin Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("roundRobin", FutureStack.class, int.class), MAX_QUANTA, 5));
+			System.out.println("\n===== First Come First Served =====\n");
+			System.out.println("First Come First Serverd Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("firstComeFirstServed", FutureStack.class, int.class), MAX_QUANTA, 5));
+			System.out.println("\n===== Shortest Remaining Time =====\n");
+			System.out.println("Shortest Job First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestRemainingTime", FutureStack.class, int.class), MAX_QUANTA, 5));
+			System.out.println("\n===== Shortest Job First =====\n");
+			System.out.println("Shortest Job First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestJobFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+			System.out.println("\n===== Nonpreemptive Highest Priority First =====\n");
+			System.out.println("Nonpreemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("nonpreemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+			System.out.println("\n===== Preemptive Highest Priority First =====\n");
+			System.out.println("Preemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("preemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Result analyzeAlgorithm(Method algorithm, int duration, int runs) {
+		Result algorithmResult = new Result();
 		FutureStack stack;
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println("===== Round Robin =====\n");
-		System.out.println(stack);
-		System.out.println(Simulator.roundRobin(stack, MAX_QUANTA));
-		System.out.println("===== First Come First Served =====\n");
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println(stack);
-		System.out.println(Simulator.firstComeFirstServed(stack, MAX_QUANTA));
-		System.out.println("===== Shortest Remaining Time =====\n");
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println(stack);
-		System.out.println(Simulator.shortestRemainingTime(stack, MAX_QUANTA));
-		System.out.println("===== Shortest Job First =====\n");
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println(stack);
-		System.out.println(Simulator.shortestJobFirst(stack, MAX_QUANTA));
-		System.out.println("===== Preemptive Highest Priority First =====\n");
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println(stack);
-		System.out.println(Simulator.preemptiveHighestPriorityFirst(stack, MAX_QUANTA));
-		System.out.println("===== Nonpreemptive Highest Priority First =====\n");
-		Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
-		System.out.println(stack);
-		System.out.println(Simulator.nonpreemptiveHighestPriorityFirst(stack, MAX_QUANTA));
+		for (int i = 0; i < runs; i++) {
+			try {
+				Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
+				System.out.println(stack);
+				
+				Result run = (Result) (algorithm.invoke(null, new Object[]{stack, duration}));
+
+				System.out.println(run.getRun() + "\n");
+				System.out.println(run + "\n");
+				
+				algorithmResult.setResponsetime(algorithmResult.getResponsetime() + run.getResponsetime());
+				algorithmResult.setThroughput(algorithmResult.getThroughput() + run.getThroughput());
+				algorithmResult.setTurnaround(algorithmResult.getTurnaround() + run.getTurnaround());
+				algorithmResult.setWaittime(algorithmResult.getWaittime() + run.getWaittime());
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		algorithmResult.setResponsetime(algorithmResult.getResponsetime()/runs);
+		algorithmResult.setThroughput(algorithmResult.getThroughput()/runs);
+		algorithmResult.setTurnaround(algorithmResult.getTurnaround()/runs);
+		algorithmResult.setWaittime(algorithmResult.getWaittime()/runs);
+		return algorithmResult;
 	}
 	
 	public static FutureStack generateStack(int count) {

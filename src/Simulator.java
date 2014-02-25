@@ -17,7 +17,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String firstComeFirstServed(FutureStack future, int duration) {
+	public static Result firstComeFirstServed(FutureStack future, int duration) {
 		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
@@ -40,8 +40,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		return result;
+		return analyzeCompletion(result, completed, duration);
 	}
 	
 	/**
@@ -51,7 +50,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String roundRobin(FutureStack future, int duration) {
+	public static Result roundRobin(FutureStack future, int duration) {
 		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
@@ -76,8 +75,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		return result;
+		return analyzeCompletion(result, completed, duration);
 	}
 	
 	/**
@@ -87,7 +85,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String shortestRemainingTime(FutureStack future, int duration) {
+	public static Result shortestRemainingTime(FutureStack future, int duration) {
 		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
@@ -110,8 +108,7 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		return result;
+		return analyzeCompletion(result, completed, duration);
 	}
 	
 	/**
@@ -124,7 +121,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String shortestJobFirst(FutureStack future, int duration) {
+	public static Result shortestJobFirst(FutureStack future, int duration) {
 		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
@@ -151,8 +148,8 @@ public class Simulator {
 			
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		return result;
+		
+		return analyzeCompletion(result, completed, duration);
 	}
 
 	/**
@@ -162,7 +159,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String nonpreemptiveHighestPriorityFirst(FutureStack future, int duration)
+	public static Result nonpreemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with FCFS
 		String result = "";
@@ -209,8 +206,8 @@ public class Simulator {
 			//End Non-preemptive HPF
 			result += proc;
 		}
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		return result;
+		
+		return analyzeCompletion(result, completed, duration);
 	}
 	
 	/**
@@ -220,7 +217,7 @@ public class Simulator {
 	 * @param duration The length of the run in quanta
 	 * @return The results of the run as a String
 	 */
-	public static String preemptiveHighestPriorityFirst(FutureStack future, int duration)
+	public static Result preemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with RR
 		String result = "";
@@ -278,9 +275,7 @@ public class Simulator {
 			//End Preemptive HPF
 		}
 		
-		result += "\n\n" + analyzeCompletion(completed, duration) + "\n";
-		
-		return result;
+		return analyzeCompletion(result, completed, duration);
 	}
 	
 	/**
@@ -289,8 +284,7 @@ public class Simulator {
 	 * @param list The list of completed operations
 	 * @return The results as a string
 	 */
-	private static String analyzeCompletion(ArrayList<Process> list, int duration) {
-		String result;
+	private static Result analyzeCompletion(String run, ArrayList<Process> list, int duration) {
 		float turnaround = 0;
 		float waittime = 0;
 		float responsetime = 0;
@@ -305,9 +299,6 @@ public class Simulator {
 		turnaround /= count;
 		waittime /= count;
 		responsetime /= count;
-		result = "Average turnaround: " + turnaround + "\nAverage wait time: "
-		+ waittime + "\nAverage response time: " + responsetime
-		+ "\nThroughput: " + throughput;
-		return result;
+		return new Result(run, turnaround, waittime, responsetime, throughput);
 	}
 }
