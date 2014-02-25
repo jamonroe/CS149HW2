@@ -18,7 +18,7 @@ public class Simulator {
 	 * @return The results of the run as a String
 	 */
 	public static String firstComeFirstServed(FutureStack future, int duration) {
-		String result = "=== First Come First Served ===\n";
+		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
 		ArrayList<Process> completed = new ArrayList<Process>();
@@ -52,7 +52,7 @@ public class Simulator {
 	 * @return The results of the run as a String
 	 */
 	public static String roundRobin(FutureStack future, int duration) {
-		String result = "=== Round Robin ===\n";
+		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
 		ArrayList<Process> completed = new ArrayList<Process>();
@@ -88,7 +88,7 @@ public class Simulator {
 	 * @return The results of the run as a String
 	 */
 	public static String shortestRemainingTime(FutureStack future, int duration) {
-		String result = "=== Shortest Remaining Time ===\n";
+		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
 		ArrayList<Process> completed = new ArrayList<Process>();
@@ -125,7 +125,7 @@ public class Simulator {
 	 * @return The results of the run as a String
 	 */
 	public static String shortestJobFirst(FutureStack future, int duration) {
-		String result = "=== Shortest Job First ===\n";
+		String result = "";
 		int time;
 		ArrayList<Process> active = new ArrayList<Process>();
 		ArrayList<Process> completed = new ArrayList<Process>();
@@ -165,7 +165,7 @@ public class Simulator {
 	public static String nonpreemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with FCFS
-		String result = "=== Highest Priority First (Nonpreemptive) ===\n";
+		String result = "";
 		
 		//Setup
 		int time;
@@ -223,7 +223,7 @@ public class Simulator {
 	public static String preemptiveHighestPriorityFirst(FutureStack future, int duration)
 	{
 		//Implemented with RR
-		String result = "=== Highest Priority First (Preemptive) ===\n";
+		String result = "";
 		int time;
 		ArrayList<Process> completed = new ArrayList<Process>();
 		

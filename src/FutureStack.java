@@ -15,4 +15,11 @@ public class FutureStack extends ArrayList<Process> {
 		return size() > 0 && get(0).getArrivalTime() <= time;
 	}
 	public Process pop() { return size() > 0 ? remove(0) : null; }
+	public String toString() {
+		String result = "";
+		for (Process p : this) {
+			result += p + "\n";
+		}
+		return result;
+	}
 }

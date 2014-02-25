@@ -96,4 +96,9 @@ public class Process {
 			}
 		};
 	}
+	
+	public String toString() {
+		return String.format("%-8s %-24s %-20s %-13s", "Name=" + name, "Arrival Time=" + arrival_time, 
+				"Run Time=" + run_time, "Priority=" + priority);
+	}
 }
