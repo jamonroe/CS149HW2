@@ -1,4 +1,5 @@
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * Useful for testing for now
@@ -51,9 +52,10 @@ public class Main {
 	}
 	
 	public static Process generateProcess(char name) {
-		float arrival_time = (float) Math.random() * MAX_QUANTA;
-		float run_time = (float) Math.random() * (MAX_RUNTIME - MIN_RUNTIME) + MIN_RUNTIME;
-		int priority = (int) Math.floor(Math.random() * (MAX_PRIORITY - MIN_PRIORITY)) + MIN_PRIORITY;
+		Random rand = new Random();
+		float arrival_time = rand.nextFloat() * MAX_QUANTA;
+		float run_time = rand.nextFloat() * (MAX_RUNTIME - MIN_RUNTIME) + MIN_RUNTIME;
+		int priority = rand.nextInt(MAX_PRIORITY) + 1;
 		return new Process(name, arrival_time, run_time, priority);
 	}
 }
