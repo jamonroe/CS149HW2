@@ -20,17 +20,24 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 			System.out.println("\n===== Round Robin =====\n");
-			System.out.println("Round Robin Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("roundRobin", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String RR = "Round Robin Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("roundRobin", FutureStack.class, int.class), MAX_QUANTA, 5);
 			System.out.println("\n===== First Come First Served =====\n");
-			System.out.println("First Come First Serverd Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("firstComeFirstServed", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String FCFS = "First Come First Served Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("firstComeFirstServed", FutureStack.class, int.class), MAX_QUANTA, 5);
 			System.out.println("\n===== Shortest Remaining Time =====\n");
-			System.out.println("Shortest Job First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestRemainingTime", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String SRT = "Shortest Remaining Time Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestRemainingTime", FutureStack.class, int.class), MAX_QUANTA, 5);
 			System.out.println("\n===== Shortest Job First =====\n");
-			System.out.println("Shortest Job First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestJobFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String SJF = "Shortest Job First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("shortestJobFirst", FutureStack.class, int.class), MAX_QUANTA, 5);
 			System.out.println("\n===== Nonpreemptive Highest Priority First =====\n");
-			System.out.println("Nonpreemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("nonpreemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String NPHPF = "Nonpreemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("nonpreemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5);
 			System.out.println("\n===== Preemptive Highest Priority First =====\n");
-			System.out.println("Preemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("preemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5));
+			String PHPF = "Preemptive Highest Priority First Results:\n" + analyzeAlgorithm(Simulator.class.getMethod("preemptiveHighestPriorityFirst", FutureStack.class, int.class), MAX_QUANTA, 5);
+			System.out.println("***** Algorithm Results *****\n");
+			System.out.println(RR + "\n");
+			System.out.println(FCFS + "\n");
+			System.out.println(SRT + "\n");
+			System.out.println(SJF + "\n");
+			System.out.println(NPHPF + "\n");
+			System.out.println(PHPF + "\n");
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
