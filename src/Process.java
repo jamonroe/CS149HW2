@@ -40,8 +40,10 @@ public class Process {
 	public float getArrivalTime() { return arrival_time; }
 	public float getRunTime() { return run_time; }
 	public float getTimeRemaining() { return time_remaining; }
+	public int getFirstProcessTime() { return first_process_time; }
 	public int getLastProcessTime() { return last_process_time; } //TODO this would be for extra credit
 	public int getPriority() { return priority; }
+	public float getCompletionTime() { return completion_time; }
 	
 	/**
 	 * since time_remaining becomes negative for non whole number
