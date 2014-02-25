@@ -41,6 +41,7 @@ public class Main {
 		FutureStack stack;
 		for (int i = 0; i < runs; i++) {
 			try {
+				System.out.println("* " + algorithm.getName() + " run #" + (i + 1) + "*");
 				Collections.sort(stack = generateStack(PROCESS_COUNT), Process.arrivalTimeComparator());
 				System.out.println(stack);
 				
